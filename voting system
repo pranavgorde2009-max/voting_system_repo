@@ -1,0 +1,145 @@
+#include <stdio.h>
+#include <string.h>
+
+struct Bus {
+    int seatNo;
+    char name[50];
+    char gender[10];
+    int age;
+};
+
+struct Bus passenger[20];
+int total = 0;
+
+void reserveSeat() {
+    if (total >= 20) {
+        printf("\nBus is Full!\n");
+        return;
+    }
+
+    printf("\nEnter Seat Number (1-20): ");
+    scanf("%d", &passenger[total].seatNo);
+
+    printf("Enter Passenger Name: ");
+    scanf(" %[^\n]", passenger[total].name);
+
+    printf("Enter Gender: ");
+    scanf("%s", passenger[total].gender);
+
+    printf("Enter Age: ");
+    scanf("%d", &passenger[total].age);
+
+    total++;
+
+    printf("\nSeat Reserved Successfully!\n");
+}
+
+void viewReservation() {
+    int i;
+
+    if (total == 0) {
+        printf("\nNo Reservation Found!\n");
+        return;
+    }
+
+    printf("\n-------------------------------\n");
+    printf("Seat\tName\t\tGender\tAge\n");
+    printf("-------------------------------\n");
+
+    for (i = 0; i < total; i++) {
+        printf("%d\t%s\t\t%s\t%d\n",
+               passenger[i].seatNo,
+               passenger[i].name,
+               passenger[i].gender,
+               passenger[i].age);
+    }
+}
+
+void searchReservation() {
+    int seat, i, found = 0;
+
+    printf("\nEnter Seat Number: ");
+    scanf("%d", &seat);
+
+    for (i = 0; i < total; i++) {
+        if (passenger[i].seatNo == seat) {
+            printf("\nReservation Found\n");
+            printf("Name   : %s\n", passenger[i].name);
+            printf("Gender : %s\n", passenger[i].gender);
+            printf("Age    : %d\n", passenger[i].age);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found)
+        printf("\nReservation Not Found!\n");
+}
+
+void cancelReservation() {
+    int seat, i, j, found = 0;
+
+    printf("\nEnter Seat Number to Cancel: ");
+    scanf("%d", &seat);
+
+    for (i = 0; i < total; i++) {
+        if (passenger[i].seatNo == seat) {
+            found = 1;
+
+            for (j = i; j < total - 1; j++) {
+                passenger[j] = passenger[j + 1];
+            }
+
+            total--;
+            printf("\nReservation Cancelled Successfully!\n");
+            break;
+        }
+    }
+
+    if (!found)
+        printf("\nSeat Not Found!\n");
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\n============================");
+        printf("\n BUS RESERVATION SYSTEM");
+        printf("\n============================");
+        printf("\n1. Reserve Seat");
+        printf("\n2. View Reservations");
+        printf("\n3. Search Reservation");
+        printf("\n4. Cancel Reservation");
+        printf("\n5. Exit");
+        printf("\nEnter Choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                reserveSeat();
+                break;
+
+            case 2:
+                viewReservation();
+                break;
+
+            case 3:
+                searchReservation();
+                break;
+
+            case 4:
+                cancelReservation();
+                break;
+
+            case 5:
+                printf("\nThank You!\n");
+                return 0;
+
+            default:
+                printf("\nInvalid Choice!\n");
+        }
+    }
+
+    return 0;
+}
